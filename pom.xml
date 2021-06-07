@@ -14,6 +14,7 @@
     </properties>
 
     <dependencies>
+        <!--JDA-->
         <dependency>
             <groupId>net.dv8tion</groupId>
             <artifactId>JDA</artifactId>
@@ -25,9 +26,11 @@
                 </exclusion>
             </exclusions>
         </dependency>
+
     </dependencies>
 
     <repositories>
+        <!--JDA-->
         <repository>
             <id>dv8tion</id>
             <name>m2-dv8tion</name>

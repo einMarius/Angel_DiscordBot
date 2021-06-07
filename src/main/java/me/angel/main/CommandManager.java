@@ -1,6 +1,7 @@
 package me.angel.main;
 
 import me.angel.commands.types.ServerCommand;
+import me.angel.commands.use.ClearCommand;
 import me.angel.reactionroles.ReactionRoleCommand;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Message;
@@ -19,6 +20,7 @@ public class CommandManager {
         this.commands = new ConcurrentHashMap<>();
 
         this.commands.put("reactionrole", new ReactionRoleCommand(plugin));
+        this.commands.put("clear", new ClearCommand());
 
     }
 

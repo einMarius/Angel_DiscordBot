@@ -4,13 +4,18 @@ import me.angel.listeners.CommandListener;
 import me.angel.listeners.GuildJoinListener;
 import me.angel.listeners.GuildMemberLeave;
 import me.angel.listeners.UserRoleListener;
+import me.angel.reactionroles.ReactionRoleListener;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.OnlineStatus;
 import net.dv8tion.jda.api.entities.Activity;
+import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.requests.GatewayIntent;
 
 import javax.security.auth.login.LoginException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
 public class Main {
 
@@ -34,6 +39,9 @@ public class Main {
     private Main instance;
     private CommandManager commandManager;
 
+    public List<Long> tempchannels;
+    public HashMap<Member, Integer> channellimit;
+
     private JDABuilder jdaBuilder;
 
     public static void main(String[] args) {
@@ -47,17 +55,22 @@ public class Main {
         instance = this;
         commandManager = new CommandManager(this);
 
+        tempchannels = new ArrayList<>();
+        channellimit = new HashMap<>();
+
         jdaBuilder = JDABuilder.createDefault(TOKEN);
         jdaBuilder.enableIntents(GatewayIntent.GUILD_MEMBERS);
         jdaBuilder.setActivity(Activity.watching("auf den Discord..."));
         jdaBuilder.setStatus(OnlineStatus.DO_NOT_DISTURB);
+
         JDA bot = null;
 
         //--------------Bot-Register---------------//
         jdaBuilder.addEventListeners(new CommandListener(this));
-        jdaBuilder.addEventListeners(new GuildJoinListener());
-        jdaBuilder.addEventListeners(new GuildMemberLeave());
-        jdaBuilder.addEventListeners(new UserRoleListener(this));
+        //jdaBuilder.addEventListeners(new GuildJoinListener());
+        //jdaBuilder.addEventListeners(new GuildMemberLeave());
+        //jdaBuilder.addEventListeners(new UserRoleListener(this));
+        jdaBuilder.addEventListeners(new ReactionRoleListener(this));
         //--------------Bot-Register---------------//
 
         try {
