@@ -32,7 +32,7 @@ public class ReactionRoleCommand implements ServerCommand {
                         .addField("**Twitch-Role**", ">>> :two: `-` Twitch", false)
                         .addField("**Umfrage-Role**", ">>> :three: `-` Umfrage", false)
                         .setThumbnail(member.getGuild().getIconUrl())
-                        .setFooter("Bot created by Marius")
+                        .setFooter("Bot created by @" + member.getJDA().getUserById(plugin.MARIUS_ID).getAsTag())
                         .setColor(Color.decode("0x242323"));
 
                 if(args.length == 1){

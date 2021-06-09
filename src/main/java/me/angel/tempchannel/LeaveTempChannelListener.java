@@ -12,13 +12,28 @@ public class LeaveTempChannelListener extends ListenerAdapter {
 
     @Override
     public void onGuildVoiceLeave(GuildVoiceLeaveEvent e){
-        if (e.getMember().getUser().isBot()) return;
-
         VoiceChannel voiceChannel = e.getChannelLeft();
-        if(voiceChannel.getMembers().size() <= 0) {
+        /*
+        if(voiceChannel.getMembers().size() <= 0){
             if(plugin.tempchannels.contains(voiceChannel.getIdLong())){
                 plugin.tempchannels.remove(voiceChannel.getIdLong());
                 voiceChannel.delete().queue();
+            }
+        } */
+        if(voiceChannel.getMembers().size() == 0){
+            if(plugin.tempchannels.contains(voiceChannel.getIdLong())) {
+                plugin.tempchannels.remove(voiceChannel.getIdLong());
+                voiceChannel.delete().queue();
+            }
+        }
+        onLeave(e.getChannelLeft());
+    }
+
+    private void onLeave(VoiceChannel channel) {
+        if(channel.getMembers().size() <= 0){
+            if(plugin.tempchannels.contains(channel.getIdLong())){
+                plugin.tempchannels.remove(channel.getIdLong());
+                channel.delete().queue();
             }
         }
     }

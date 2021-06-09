@@ -1,25 +1,23 @@
 package me.angel.main;
 
 import me.angel.listeners.CommandListener;
-import me.angel.listeners.GuildJoinListener;
-import me.angel.listeners.GuildMemberLeave;
-import me.angel.listeners.UserRoleListener;
 import me.angel.reactionroles.ReactionRoleListener;
+import me.angel.tempchannel.JoinMainChannelListener;
+import me.angel.tempchannel.LeaveTempChannelListener;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.OnlineStatus;
 import net.dv8tion.jda.api.entities.Activity;
-import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.requests.GatewayIntent;
 
 import javax.security.auth.login.LoginException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 public class Main {
 
     final private String TOKEN = "TOKEN";
+    final public long MARIUS_ID = 374932063423561729L;
 
     /*
     *
@@ -40,7 +38,6 @@ public class Main {
     private CommandManager commandManager;
 
     public List<Long> tempchannels;
-    public HashMap<Member, Integer> channellimit;
 
     private JDABuilder jdaBuilder;
 
@@ -56,7 +53,6 @@ public class Main {
         commandManager = new CommandManager(this);
 
         tempchannels = new ArrayList<>();
-        channellimit = new HashMap<>();
 
         jdaBuilder = JDABuilder.createDefault(TOKEN);
         jdaBuilder.enableIntents(GatewayIntent.GUILD_MEMBERS);
@@ -71,6 +67,8 @@ public class Main {
         //jdaBuilder.addEventListeners(new GuildMemberLeave());
         //jdaBuilder.addEventListeners(new UserRoleListener(this));
         jdaBuilder.addEventListeners(new ReactionRoleListener(this));
+        jdaBuilder.addEventListeners(new JoinMainChannelListener(this));
+        jdaBuilder.addEventListeners(new LeaveTempChannelListener(this));
         //--------------Bot-Register---------------//
 
         try {

@@ -2,16 +2,16 @@ package me.angel.tempchannel;
 
 import me.angel.main.Main;
 import net.dv8tion.jda.api.EmbedBuilder;
-import net.dv8tion.jda.api.entities.Category;
-import net.dv8tion.jda.api.entities.Guild;
-import net.dv8tion.jda.api.entities.TextChannel;
-import net.dv8tion.jda.api.entities.VoiceChannel;
+import net.dv8tion.jda.api.JDA;
+import net.dv8tion.jda.api.Permission;
+import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.events.guild.voice.GuildVoiceJoinEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 
 import java.awt.*;
+import java.time.Clock;
+import java.time.LocalDateTime;
 import java.util.Random;
-import java.util.concurrent.CompletableFuture;
 
 public class JoinMainChannelListener extends ListenerAdapter {
 
@@ -20,6 +20,7 @@ public class JoinMainChannelListener extends ListenerAdapter {
     public JoinMainChannelListener(Main plugin) { this.plugin = plugin; }
 
     String[] colours =  new String[] { "ff0000", "ff6600", "fff700", "59ff00", "00ff5e", "00eeff", "003cff" };
+    private Member marius;
 
     @Override
     public void onGuildVoiceJoin(GuildVoiceJoinEvent e){
@@ -33,31 +34,23 @@ public class JoinMainChannelListener extends ListenerAdapter {
         String colour = colours[i];
 
         EmbedBuilder textChannelEmbed = new EmbedBuilder()
-                .setTitle("**Einstellungen des temporären Channels")
-                .setDescription("**Hey " + e.getMember().getAsMention() + "\nSchreib die Anzahl der Channel Mitglieder in den Chat!**")
-                .setThumbnail(e.getGuild().getIconUrl())
-                .setColor(Color.decode("0x"+colour));
+                .setTitle("**Einstellungen des temporären Channels**")
+                .setDescription("**Hey " + e.getMember().getAsMention() + "\nDein privater Channel wurde erstellt und du wurdest hineingemovet!\n" +
+                        "Du kannst in diesem Channel sowohl die Permissions, als auch den Channel im Allgemeinen einstellen.**")
+                .setThumbnail(e.getMember().getUser().getAvatarUrl())
+                .setColor(Color.decode("0x"+colour))
+                .setFooter("Bot created by @" + e.getMember().getJDA().getUserById(plugin.MARIUS_ID).getAsTag())
+                .setTimestamp(LocalDateTime.now(Clock.systemUTC()));
 
         if(voiceChannel.getIdLong() == 851531704031248430L) {
             Category category = voiceChannel.getParent();
+            
+            textChannel.sendMessage(textChannelEmbed.build()).queue();
+            VoiceChannel tempChannel = category.createVoiceChannel("⏳ | " + e.getMember().getEffectiveName() + "´s Channel").complete();
+            tempChannel.upsertPermissionOverride(e.getMember()).grant(Permission.MANAGE_CHANNEL).grant(Permission.VOICE_MOVE_OTHERS).grant(Permission.MANAGE_PERMISSIONS).queue();
+            tempChannel.getGuild().moveVoiceMember(e.getMember(), tempChannel).queue();
 
-            textChannel.sendMessage(textChannelEmbed.build()).queue(());
-
-            /*textChannel.sendMessage(textChannelEmbed.build()).submit()
-                    .thenComposeAsync((tempChannel) -> category.createVoiceChannel("⏳ | " + e.getMember().getEffectiveName() + "´s Channel").submit())
-                    //.thenComposeAsync((voiceChannel1) -> voiceChannel.getManager().setUserLimit(plugin.channellimit.get(e.getMember())))
-                    .thenComposeAsync((m) -> m.getManager().setUserLimit(plugin.channellimit.get(e.getMember())).submit())
-                    .thenComposeAsync((v) -> e.getMember().getGuild().moveVoiceMember(e.getMember(), tempChannel).submit())
-                    .whenCompleteAsync((s, error) -> {
-                       plugin.channellimit.remove(e.getMember());
-                       if(error != null) {
-                           error.printStackTrace();
-                           System.out.println("Es gab einen Fehler");
-                       }
-
-                    });
-
-             */
+            plugin.tempchannels.add(tempChannel.getIdLong());
         }
     }
 
