@@ -57,6 +57,5 @@ public class ClearCommand implements ServerCommand {
 
             }
         }
-
     }
 }

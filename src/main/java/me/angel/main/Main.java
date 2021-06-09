@@ -26,6 +26,7 @@ public class Main {
     */
     final public long VERIFIZIEREN = 825776388530765915L;
     final public long REACTION_ROLES = 848711038768906290L;
+    final public long ABSTIMMUNGEN = 825344586712219649L;
 
     /*
      *
@@ -33,6 +34,7 @@ public class Main {
      *
      */
     final public long USER = 825004459775361064L;
+    final public long UMFRAGE = 851477225110241280L;
 
     private Main instance;
     private CommandManager commandManager;
@@ -76,7 +78,7 @@ public class Main {
             bot.awaitReady();
         } catch (LoginException | InterruptedException e) {
             e.printStackTrace();
-            System.out.println("[AngelBot] Es gab einen Fehler beim starten des Discord Bots!");
+            System.out.println("[AngelBot] Es gab einen Fehler beim Starten des Discord Bots!");
         }
 
         System.out.println("[AngelBot] Der Bot, sowie alle Systeme wurden gestartet!");
