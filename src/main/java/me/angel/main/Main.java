@@ -4,15 +4,18 @@ import me.angel.listeners.CommandListener;
 import me.angel.reactionroles.ReactionRoleListener;
 import me.angel.tempchannel.JoinMainChannelListener;
 import me.angel.tempchannel.LeaveTempChannelListener;
+import me.angel.tempchannel.MoveIntoMainChannelListener;
+import me.angel.tempchannel.MoveOutTempChannelListener;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.OnlineStatus;
 import net.dv8tion.jda.api.entities.Activity;
+import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.requests.GatewayIntent;
+import org.apache.commons.collections4.map.HashedMap;
 
 import javax.security.auth.login.LoginException;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Map;
 
 public class Main {
 
@@ -27,6 +30,10 @@ public class Main {
     final public long VERIFIZIEREN = 825776388530765915L;
     final public long REACTION_ROLES = 848711038768906290L;
     final public long ABSTIMMUNGEN = 825344586712219649L;
+    final public long JOIN_CHANNEL = 852245359019425842L;
+    final public long TEMP_CHANNEL = 851535846284984400L;
+    final public long MEMES = 825345761050099732L;
+    final public long TICKET_DC_BOT = 851131058178097172L;
 
     /*
      *
@@ -39,7 +46,7 @@ public class Main {
     private Main instance;
     private CommandManager commandManager;
 
-    public List<Long> tempchannels;
+    public Map<Member, Long> tempchannels;
 
     private JDABuilder jdaBuilder;
 
@@ -54,7 +61,7 @@ public class Main {
         instance = this;
         commandManager = new CommandManager(this);
 
-        tempchannels = new ArrayList<>();
+        tempchannels = new HashedMap<>();
 
         jdaBuilder = JDABuilder.createDefault(TOKEN);
         jdaBuilder.enableIntents(GatewayIntent.GUILD_MEMBERS);
@@ -71,6 +78,8 @@ public class Main {
         jdaBuilder.addEventListeners(new ReactionRoleListener(this));
         jdaBuilder.addEventListeners(new JoinMainChannelListener(this));
         jdaBuilder.addEventListeners(new LeaveTempChannelListener(this));
+        jdaBuilder.addEventListeners(new MoveIntoMainChannelListener(this));
+        jdaBuilder.addEventListeners(new MoveOutTempChannelListener(this));
         //--------------Bot-Register---------------//
 
         try {

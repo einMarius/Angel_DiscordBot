@@ -31,7 +31,7 @@ public class CommandListener extends ListenerAdapter {
                         EmbedBuilder info = new EmbedBuilder()
                                 .setTitle("Information")
                                 .setDescription("Der Befehl ist nicht bekannt")
-                                .setFooter("Bot created by @" + e.getMember().getJDA().getUserById(plugin.MARIUS_ID).getAsTag(), e.getGuild().getIconUrl())
+                                .setFooter("Bot created by Marius")
                                 .setColor(Color.RED);
 
                         channel.sendTyping().queue();
