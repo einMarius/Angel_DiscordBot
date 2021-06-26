@@ -12,30 +12,30 @@ public class ReactionRoleListener extends ListenerAdapter {
     public ReactionRoleListener(Main plugin) { this.plugin = plugin; }
 
     @Override
-    public void onMessageReactionAdd(MessageReactionAddEvent e){
-        if(e.getUser().isBot()) return;
+    public void onMessageReactionAdd(MessageReactionAddEvent event){
+        if(event.getUser().isBot()) return;
 
-        if(e.getChannel().getIdLong() == plugin.REACTION_ROLES || e.getChannel().getIdLong() == 851478568269250580L) {
+        if(event.getChannel().getIdLong() == plugin.REACTION_ROLES || event.getChannel().getIdLong() == 851478568269250580L) {
 
-            if(e.getReaction().getReactionEmote().getEmoji().equalsIgnoreCase("1⃣")) {
-                AuditableRestAction<Void> action = e
+            if(event.getReaction().getReactionEmote().getEmoji().equalsIgnoreCase("1⃣")) {
+                AuditableRestAction<Void> action = event
                         .getGuild()
-                        .addRoleToMember(e.getUserId(), e.getGuild().getRoleById(851477087809437776L));
+                        .addRoleToMember(event.getUserId(), event.getGuild().getRoleById(851477087809437776L));
                 action.queue();
                 return;
             //Twitch Emote
             }
-            if(e.getReaction().getReactionEmote().getEmoji().equalsIgnoreCase("2⃣")) {
-                AuditableRestAction<Void> action = e
+            if(event.getReaction().getReactionEmote().getEmoji().equalsIgnoreCase("2⃣")) {
+                AuditableRestAction<Void> action = event
                         .getGuild()
-                        .addRoleToMember(e.getUserId(), e.getGuild().getRoleById(848710448790110239L));
+                        .addRoleToMember(event.getUserId(), event.getGuild().getRoleById(848710448790110239L));
                 action.queue();
                 return;
             }
-            if(e.getReaction().getReactionEmote().getEmoji().equalsIgnoreCase("3⃣")) {
-                AuditableRestAction<Void> action = e
+            if(event.getReaction().getReactionEmote().getEmoji().equalsIgnoreCase("3⃣")) {
+                AuditableRestAction<Void> action = event
                         .getGuild()
-                        .addRoleToMember(e.getUserId(), e.getGuild().getRoleById(851477225110241280L));
+                        .addRoleToMember(event.getUserId(), event.getGuild().getRoleById(851477225110241280L));
                 action.queue();
                 return;
             }

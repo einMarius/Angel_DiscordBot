@@ -6,6 +6,8 @@ import me.angel.tempchannel.JoinMainChannelListener;
 import me.angel.tempchannel.LeaveTempChannelListener;
 import me.angel.tempchannel.MoveIntoMainChannelListener;
 import me.angel.tempchannel.MoveOutTempChannelListener;
+import me.angel.ticketsystem.ReactionAddListener;
+import me.angel.utils.Util;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.OnlineStatus;
@@ -19,8 +21,36 @@ import java.util.Map;
 
 public class Main {
 
+/*
+
+
+
+               AAA                                                                         lllllll BBBBBBBBBBBBBBBBB                             tttt
+              A:::A                                                                        l:::::l B::::::::::::::::B                         ttt:::t
+             A:::::A                                                                       l:::::l B::::::BBBBBB:::::B                        t:::::t
+            A:::::::A                                                                      l:::::l BB:::::B     B:::::B                       t:::::t
+           A:::::::::A           nnnn  nnnnnnnn       ggggggggg   ggggg    eeeeeeeeeeee     l::::l   B::::B     B:::::B   ooooooooooo   ttttttt:::::ttttttt
+          A:::::A:::::A          n:::nn::::::::nn    g:::::::::ggg::::g  ee::::::::::::ee   l::::l   B::::B     B:::::B oo:::::::::::oo t:::::::::::::::::t
+         A:::::A A:::::A         n::::::::::::::nn  g:::::::::::::::::g e::::::eeeee:::::ee l::::l   B::::BBBBBB:::::B o:::::::::::::::ot:::::::::::::::::t
+        A:::::A   A:::::A        nn:::::::::::::::ng::::::ggggg::::::gge::::::e     e:::::e l::::l   B:::::::::::::BB  o:::::ooooo:::::otttttt:::::::tttttt
+       A:::::A     A:::::A         n:::::nnnn:::::ng:::::g     g:::::g e:::::::eeeee::::::e l::::l   B::::BBBBBB:::::B o::::o     o::::o      t:::::t
+      A:::::AAAAAAAAA:::::A        n::::n    n::::ng:::::g     g:::::g e:::::::::::::::::e  l::::l   B::::B     B:::::Bo::::o     o::::o      t:::::t
+     A:::::::::::::::::::::A       n::::n    n::::ng:::::g     g:::::g e::::::eeeeeeeeeee   l::::l   B::::B     B:::::Bo::::o     o::::o      t:::::t
+    A:::::AAAAAAAAAAAAA:::::A      n::::n    n::::ng::::::g    g:::::g e:::::::e            l::::l   B::::B     B:::::Bo::::o     o::::o      t:::::t    tttttt
+   A:::::A             A:::::A     n::::n    n::::ng:::::::ggggg:::::g e::::::::e          l::::::lBB:::::BBBBBB::::::Bo:::::ooooo:::::o      t::::::tttt:::::t
+  A:::::A               A:::::A    n::::n    n::::n g::::::::::::::::g  e::::::::eeeeeeee  l::::::lB:::::::::::::::::B o:::::::::::::::o      tt::::::::::::::t
+ A:::::A                 A:::::A   n::::n    n::::n  gg::::::::::::::g   ee:::::::::::::e  l::::::lB::::::::::::::::B   oo:::::::::::oo         tt:::::::::::tt
+AAAAAAA                   AAAAAAA  nnnnnn    nnnnnn    gggggggg::::::g     eeeeeeeeeeeeee  llllllllBBBBBBBBBBBBBBBBB      ooooooooooo             ttttttttttt
+                                                               g:::::g
+                                                   gggggg      g:::::g
+                                                   g:::::gg   gg:::::g
+                                                    g::::::ggg:::::::g
+                                                     gg:::::::::::::g
+                                                       ggg::::::ggg
+                                                          gggggg                                                                                               */
+
+
     final private String TOKEN = "TOKEN";
-    final public long MARIUS_ID = 374932063423561729L;
 
     /*
     *
@@ -43,12 +73,17 @@ public class Main {
     final public long USER = 825004459775361064L;
     final public long UMFRAGE = 851477225110241280L;
 
+    private String[] twitchNames = new String[] { "einMarius" };
+
     private Main instance;
     private CommandManager commandManager;
+    private Util util;
 
     public Map<Member, Long> tempchannels;
 
     private JDABuilder jdaBuilder;
+
+    private Thread runTwitch;
 
     public static void main(String[] args) {
 
@@ -60,13 +95,14 @@ public class Main {
 
         instance = this;
         commandManager = new CommandManager(this);
+        util = new Util(this);
 
         tempchannels = new HashedMap<>();
 
         jdaBuilder = JDABuilder.createDefault(TOKEN);
         jdaBuilder.enableIntents(GatewayIntent.GUILD_MEMBERS);
-        jdaBuilder.setActivity(Activity.watching("auf den Discord..."));
-        jdaBuilder.setStatus(OnlineStatus.DO_NOT_DISTURB);
+        jdaBuilder.setActivity(Activity.playing("auf Skywars.World"));
+        jdaBuilder.setStatus(OnlineStatus.ONLINE);
 
         JDA bot = null;
 
@@ -74,12 +110,13 @@ public class Main {
         jdaBuilder.addEventListeners(new CommandListener(this));
         //jdaBuilder.addEventListeners(new GuildJoinListener());
         //jdaBuilder.addEventListeners(new GuildMemberLeave());
-        //jdaBuilder.addEventListeners(new UserRoleListener(this));
+        //jdaBuilder.addEventListeners(new VerifyListener(this));
         jdaBuilder.addEventListeners(new ReactionRoleListener(this));
         jdaBuilder.addEventListeners(new JoinMainChannelListener(this));
         jdaBuilder.addEventListeners(new LeaveTempChannelListener(this));
         jdaBuilder.addEventListeners(new MoveIntoMainChannelListener(this));
         jdaBuilder.addEventListeners(new MoveOutTempChannelListener(this));
+        jdaBuilder.addEventListeners(new ReactionAddListener());
         //--------------Bot-Register---------------//
 
         try {
@@ -90,8 +127,23 @@ public class Main {
             System.out.println("[AngelBot] Es gab einen Fehler beim Starten des Discord Bots!");
         }
 
+        //util.executePost2();
+        //runTwitchNotification();
+
         System.out.println("[AngelBot] Der Bot, sowie alle Systeme wurden gestartet!");
 
+    }
+
+    private void runTwitchNotification() {
+        this.runTwitch = new Thread(() -> {
+            try {
+                Util.executePost("einmarius", jdaBuilder.build().getTextChannelById("851131058178097172"));
+            } catch (LoginException e) {
+                e.printStackTrace();
+            }
+        });
+        this.runTwitch.setName("TwitchNotification");
+        this.runTwitch.start();
     }
 
     public CommandManager getCommandManager() { return commandManager; }

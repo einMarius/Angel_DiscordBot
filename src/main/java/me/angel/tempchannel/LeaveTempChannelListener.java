@@ -21,11 +21,11 @@ public class LeaveTempChannelListener extends ListenerAdapter {
     private String[] colours =  new String[] { "ff0000", "ff6600", "fff700", "59ff00", "00ff5e", "00eeff", "003cff" };
 
     @Override
-    public void onGuildVoiceLeave(GuildVoiceLeaveEvent e){
-        VoiceChannel voiceChannel = e.getChannelLeft();
+    public void onGuildVoiceLeave(GuildVoiceLeaveEvent event){
+        VoiceChannel voiceChannel = event.getChannelLeft();
         //tempChannel Kategorie ID:
-        Category category = e.getGuild().getCategoryById(851531332965761094L);
-        TextChannel textChannel = e.getGuild().getTextChannelById(plugin.TEMP_CHANNEL);
+        Category category = event.getGuild().getCategoryById(851531332965761094L);
+        TextChannel textChannel = event.getGuild().getTextChannelById(plugin.TEMP_CHANNEL);
 
         //Colour for Embed
         Random rand = new Random();
@@ -33,9 +33,9 @@ public class LeaveTempChannelListener extends ListenerAdapter {
         String colour = colours[i];
         EmbedBuilder textChannelEmbed = new EmbedBuilder()
                 .setTitle("**Löschung des Channels**")
-                .setDescription("**Hey " + e.getMember().getAsMention() + "\nDein privater Channel wurde gelöscht!\n" +
+                .setDescription("**Hey " + event.getMember().getAsMention() + "\nDein privater Channel wurde gelöscht!\n" +
                         "Du kannst dir einen neuen erstellen lassen, indem du in Join-Channel joinst.**")
-                .setThumbnail(e.getMember().getUser().getAvatarUrl())
+                .setThumbnail(event.getMember().getUser().getAvatarUrl())
                 .setColor(Color.decode("0x"+colour))
                 .setFooter("Bot created by Marius")
                 .setTimestamp(LocalDateTime.now(Clock.systemUTC()));
@@ -45,7 +45,7 @@ public class LeaveTempChannelListener extends ListenerAdapter {
                 textChannel.sendMessage(textChannelEmbed.build()).queue((v) -> {
                     textChannelEmbed.clear();
                     voiceChannel.delete().queue();
-                    plugin.tempchannels.remove(e.getMember());
+                    plugin.tempchannels.remove(event.getMember());
                 });
             }
         }

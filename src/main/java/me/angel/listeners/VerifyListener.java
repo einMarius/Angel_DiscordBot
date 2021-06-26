@@ -6,20 +6,20 @@ import net.dv8tion.jda.api.events.message.react.MessageReactionAddEvent;
 import net.dv8tion.jda.api.events.message.react.MessageReactionRemoveEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 
-public class UserRoleListener extends ListenerAdapter {
+public class VerifyListener extends ListenerAdapter {
 
     private Main plugin;
-    public UserRoleListener(Main plugin) { this.plugin = plugin; }
+    public VerifyListener(Main plugin) { this.plugin = plugin; }
 
     @Override
-    public void onMessageReactionAdd(MessageReactionAddEvent e){
-        if(e.getUser().isBot()) return;
+    public void onMessageReactionAdd(MessageReactionAddEvent event){
+        if(event.getUser().isBot()) return;
 
-        TextChannel channel = e.getTextChannel();
+        TextChannel channel = event.getTextChannel();
 
         if(channel.getIdLong() == plugin.VERIFIZIEREN) {
-            if(e.getReactionEmote().getEmoji().equalsIgnoreCase("✅"))
-                e.getGuild().addRoleToMember(e.getUserId(), e.getJDA().getRoleById(plugin.USER)).queue();
+            if(event.getReactionEmote().getEmoji().equalsIgnoreCase("✅"))
+                event.getGuild().addRoleToMember(event.getUserId(), event.getJDA().getRoleById(plugin.USER)).queue();
         }
     }
 

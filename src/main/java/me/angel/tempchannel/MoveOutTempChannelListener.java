@@ -20,14 +20,14 @@ public class MoveOutTempChannelListener extends ListenerAdapter {
     private String[] colours =  new String[] { "ff0000", "ff6600", "fff700", "59ff00", "00ff5e", "00eeff", "003cff" };
 
     @Override
-    public void onGuildVoiceMove(GuildVoiceMoveEvent e){
+    public void onGuildVoiceMove(GuildVoiceMoveEvent event){
 
-        VoiceChannel joinedChannel = e.getChannelJoined();
-        VoiceChannel leftChannel = e.getChannelLeft();
+        VoiceChannel joinedChannel = event.getChannelJoined();
+        VoiceChannel leftChannel = event.getChannelLeft();
 
-        if(leftChannel.getIdLong() == plugin.tempchannels.get(e.getMember())){
+        if(leftChannel.getIdLong() == plugin.tempchannels.get(event.getMember())){
             if(leftChannel.getMembers().size() <= 0) {
-                TextChannel textChannel = e.getGuild().getTextChannelById(plugin.TEMP_CHANNEL);
+                TextChannel textChannel = event.getGuild().getTextChannelById(plugin.TEMP_CHANNEL);
 
                 //Colour for Embed
                 Random rand = new Random();
@@ -35,9 +35,9 @@ public class MoveOutTempChannelListener extends ListenerAdapter {
                 String colour = colours[i];
                 EmbedBuilder textChannelEmbed = new EmbedBuilder()
                         .setTitle("**Löschung des Channels**")
-                        .setDescription("**Hey " + e.getMember().getAsMention() + "\nDein privater Channel wurde gelöscht!\n" +
+                        .setDescription("**Hey " + event.getMember().getAsMention() + "\nDein privater Channel wurde gelöscht!\n" +
                                 "Du kannst dir einen neuen erstellen lassen, indem du in Join-Channel joinst.**")
-                        .setThumbnail(e.getMember().getUser().getAvatarUrl())
+                        .setThumbnail(event.getMember().getUser().getAvatarUrl())
                         .setColor(Color.decode("0x"+colour))
                         .setFooter("Bot created by Marius")
                         .setTimestamp(LocalDateTime.now(Clock.systemUTC()));
@@ -45,7 +45,7 @@ public class MoveOutTempChannelListener extends ListenerAdapter {
                 textChannel.sendMessage(textChannelEmbed.build()).queue((v) -> {
                     textChannelEmbed.clear();
                     leftChannel.delete().queue();
-                    plugin.tempchannels.remove(e.getMember());
+                    plugin.tempchannels.remove(event.getMember());
                 });
             }
         }

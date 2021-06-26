@@ -5,6 +5,7 @@ import me.angel.commands.use.ClearCommand;
 import me.angel.commands.use.MemeCommand;
 import me.angel.commands.use.UmfrageCommand;
 import me.angel.reactionroles.ReactionRoleCommand;
+import me.angel.ticketsystem.CreateTicketMessageCommand;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.TextChannel;
@@ -25,6 +26,7 @@ public class CommandManager {
         this.commands.put("clear", new ClearCommand());
         this.commands.put("umfrage", new UmfrageCommand(plugin));
         this.commands.put("plsmeme", new MemeCommand(plugin));
+        this.commands.put("createticket", new CreateTicketMessageCommand());
 
     }
 

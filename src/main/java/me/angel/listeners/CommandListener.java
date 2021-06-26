@@ -16,17 +16,17 @@ public class CommandListener extends ListenerAdapter {
     public CommandListener(Main plugin) { this.plugin = plugin; }
 
     @Override
-    public void onMessageReceived(MessageReceivedEvent e) {
+    public void onMessageReceived(MessageReceivedEvent event) {
 
-        String message = e.getMessage().getContentDisplay();
+        String message = event.getMessage().getContentDisplay();
 
-        if(e.getAuthor().isBot()) return;
-        if (e.isFromType(ChannelType.TEXT)) {
-            TextChannel channel = e.getTextChannel();
+        if(event.getAuthor().isBot()) return;
+        if (event.isFromType(ChannelType.TEXT)) {
+            TextChannel channel = event.getTextChannel();
             if (message.startsWith("(")) {
                 String args[] = message.substring(1).split(" ");
                 if (args.length > 0) {
-                    if (!plugin.getCommandManager().perform(args[0], e.getMember(), channel, e.getMessage())) {
+                    if (!plugin.getCommandManager().perform(args[0], event.getMember(), channel, event.getMessage())) {
 
                         EmbedBuilder info = new EmbedBuilder()
                                 .setTitle("Information")

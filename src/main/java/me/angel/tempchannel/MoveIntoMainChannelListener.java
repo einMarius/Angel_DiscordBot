@@ -22,14 +22,14 @@ public class MoveIntoMainChannelListener extends ListenerAdapter {
     private String[] colours =  new String[] { "ff0000", "ff6600", "fff700", "59ff00", "00ff5e", "00eeff", "003cff" };
 
     @Override
-    public void onGuildVoiceMove(GuildVoiceMoveEvent e){
-        if(e.getMember().getUser().isBot()) return;
-        VoiceChannel voiceChannel = e.getChannelJoined();
+    public void onGuildVoiceMove(GuildVoiceMoveEvent event){
+        if(event.getMember().getUser().isBot()) return;
+        VoiceChannel voiceChannel = event.getChannelJoined();
 
         if(voiceChannel.getIdLong() == plugin.JOIN_CHANNEL){
-            if(!plugin.tempchannels.containsKey(e.getMember())){
+            if(!plugin.tempchannels.containsKey(event.getMember())){
 
-                TextChannel textChannel = e.getGuild().getTextChannelById(851535846284984400L);
+                TextChannel textChannel = event.getGuild().getTextChannelById(851535846284984400L);
                 //Colour for Embed
                 Random rand = new Random();
                 int i = rand.nextInt(colours.length);
@@ -37,9 +37,9 @@ public class MoveIntoMainChannelListener extends ListenerAdapter {
 
                 EmbedBuilder textChannelEmbed = new EmbedBuilder()
                         .setTitle("**Einstellungen des temporären Channels**")
-                        .setDescription("**Hey " + e.getMember().getAsMention() + "\nDein privater Channel wurde erstellt und du wurdest hineingemovet!\n" +
+                        .setDescription("**Hey " + event.getMember().getAsMention() + "\nDein privater Channel wurde erstellt und du wurdest hineingemovet!\n" +
                                 "Du kannst in diesem Channel sowohl die Permissions, als auch den Channel im Allgemeinen einstellen.**")
-                        .setThumbnail(e.getMember().getUser().getAvatarUrl())
+                        .setThumbnail(event.getMember().getUser().getAvatarUrl())
                         .setColor(Color.decode("0x"+colour))
                         .setFooter("Bot created by Marius")
                         .setTimestamp(LocalDateTime.now(Clock.systemUTC()));
@@ -47,15 +47,15 @@ public class MoveIntoMainChannelListener extends ListenerAdapter {
                 Category category = voiceChannel.getParent();
 
                 textChannel.sendMessage(textChannelEmbed.build()).queue();
-                VoiceChannel tempChannel = category.createVoiceChannel("⏳ | " + e.getMember().getEffectiveName() + "´s Channel").complete();
-                tempChannel.upsertPermissionOverride(e.getMember()).grant(Permission.MANAGE_CHANNEL).grant(Permission.VOICE_MOVE_OTHERS).grant(Permission.MANAGE_PERMISSIONS).queue((channel) -> {
-                    channel.getGuild().moveVoiceMember(e.getMember(), tempChannel).queue();
+                VoiceChannel tempChannel = category.createVoiceChannel("⏳ | " + event.getMember().getEffectiveName() + "´s Channel").complete();
+                tempChannel.upsertPermissionOverride(event.getMember()).grant(Permission.MANAGE_CHANNEL).grant(Permission.VOICE_MOVE_OTHERS).grant(Permission.MANAGE_PERMISSIONS).queue((channel) -> {
+                    channel.getGuild().moveVoiceMember(event.getMember(), tempChannel).queue();
                 });
 
-                plugin.tempchannels.put(e.getMember(), tempChannel.getIdLong());
+                plugin.tempchannels.put(event.getMember(), tempChannel.getIdLong());
             } else {
 
-                TextChannel textChannel = e.getGuild().getTextChannelById(851535846284984400L);
+                TextChannel textChannel = event.getGuild().getTextChannelById(851535846284984400L);
                 //Colour for Embed
                 Random rand = new Random();
                 int i = rand.nextInt(colours.length);
@@ -63,15 +63,15 @@ public class MoveIntoMainChannelListener extends ListenerAdapter {
 
                 EmbedBuilder textChannelEmbed = new EmbedBuilder()
                         .setTitle("**Information**")
-                        .setDescription("**Hey " + e.getMember().getAsMention() + "\nDu hast bereits einen temporären Channel!\n" +
+                        .setDescription("**Hey " + event.getMember().getAsMention() + "\nDu hast bereits einen temporären Channel!\n" +
                                 "Du wurdest in diesen zurückgemovet!**")
-                        .setThumbnail(e.getMember().getUser().getAvatarUrl())
+                        .setThumbnail(event.getMember().getUser().getAvatarUrl())
                         .setColor(Color.decode("0x"+colour))
                         .setFooter("Bot created by Marius")
                         .setTimestamp(LocalDateTime.now(Clock.systemUTC()));
 
                 textChannel.sendMessage(textChannelEmbed.build()).queue();
-                e.getMember().getGuild().moveVoiceMember(e.getMember(), e.getGuild().getVoiceChannelById(plugin.tempchannels.get(e.getMember()))).queue();
+                event.getMember().getGuild().moveVoiceMember(event.getMember(), event.getGuild().getVoiceChannelById(plugin.tempchannels.get(event.getMember()))).queue();
             }
         }
     }
