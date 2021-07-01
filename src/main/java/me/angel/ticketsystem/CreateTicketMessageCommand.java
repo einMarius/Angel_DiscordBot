@@ -6,6 +6,8 @@ import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.TextChannel;
+import net.dv8tion.jda.api.interactions.components.Button;
+import net.dv8tion.jda.api.interactions.components.ButtonStyle;
 
 import java.awt.*;
 import java.util.concurrent.TimeUnit;
@@ -29,9 +31,9 @@ public class CreateTicketMessageCommand implements ServerCommand {
                             .setFooter("Bot created by Marius", textChannel.getGuild().getIconUrl())
                             .setColor(Color.GREEN);
 
-                    textChannel.sendMessage(embedBuilder.build()).queue(embedMessage -> {
-                        embedMessage.addReaction("📩").queue();
-                    });
+                    //📩
+
+                    textChannel.sendMessage(embedBuilder.build()).setActionRow(Button.secondary("Buttons", "📩")).queue();
 
                 } else {
                     message.delete().queue();

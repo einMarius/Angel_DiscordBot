@@ -73,6 +73,8 @@ AAAAAAA                   AAAAAAA  nnnnnn    nnnnnn    gggggggg::::::g     eeeee
     final public long USER = 825004459775361064L;
     final public long UMFRAGE = 851477225110241280L;
 
+
+
     private String[] twitchNames = new String[] { "einMarius" };
 
     private Main instance;
@@ -92,10 +94,6 @@ AAAAAAA                   AAAAAAA  nnnnnn    nnnnnn    gggggggg::::::g     eeeee
     }
 
     public Main() {
-
-        instance = this;
-        commandManager = new CommandManager(this);
-        util = new Util(this);
 
         tempchannels = new HashedMap<>();
 
@@ -126,6 +124,10 @@ AAAAAAA                   AAAAAAA  nnnnnn    nnnnnn    gggggggg::::::g     eeeee
             e.printStackTrace();
             System.out.println("[AngelBot] Es gab einen Fehler beim Starten des Discord Bots!");
         }
+
+        instance = this;
+        util = new Util(this);
+        commandManager = new CommandManager(this, bot);
 
         //util.executePost2();
         //runTwitchNotification();
