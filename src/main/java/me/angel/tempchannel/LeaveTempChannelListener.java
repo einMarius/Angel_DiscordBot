@@ -24,7 +24,7 @@ public class LeaveTempChannelListener extends ListenerAdapter {
     public void onGuildVoiceLeave(GuildVoiceLeaveEvent event){
         VoiceChannel voiceChannel = event.getChannelLeft();
         //tempChannel Kategorie ID:
-        Category category = event.getGuild().getCategoryById(851531332965761094L);
+        Category category = event.getGuild().getCategoryById(plugin.TEMP_CHANNEL_CAT);
         TextChannel textChannel = event.getGuild().getTextChannelById(plugin.TEMP_CHANNEL);
 
         //Colour for Embed

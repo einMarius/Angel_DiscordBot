@@ -60,10 +60,17 @@ AAAAAAA                   AAAAAAA  nnnnnn    nnnnnn    gggggggg::::::g     eeeee
     final public long VERIFIZIEREN = 825776388530765915L;
     final public long REACTION_ROLES = 848711038768906290L;
     final public long ABSTIMMUNGEN = 825344586712219649L;
-    final public long JOIN_CHANNEL = 852245359019425842L;
-    final public long TEMP_CHANNEL = 851535846284984400L;
+    final public long JOIN_CHANNEL = 916677726939791368L; //ID muss wieder ausgetauscht werden!
+    final public long TEMP_CHANNEL = 916677695658663996L; //ID muss wieder ausgetauscht werden! Kategorie ID in TempChannelListener muss geändert werden!
     final public long MEMES = 825345761050099732L;
     final public long TICKET_DC_BOT = 851131058178097172L;
+
+    /*
+     *
+     * Role Id´s für den Angel Discord
+     *
+     */
+    final public long TEMP_CHANNEL_CAT = 916677644844679178L; //ID NOCH FÜR TESTSERVER
 
     /*
      *

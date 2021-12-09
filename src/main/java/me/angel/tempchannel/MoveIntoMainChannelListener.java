@@ -29,7 +29,7 @@ public class MoveIntoMainChannelListener extends ListenerAdapter {
         if(voiceChannel.getIdLong() == plugin.JOIN_CHANNEL){
             if(!plugin.tempchannels.containsKey(event.getMember())){
 
-                TextChannel textChannel = event.getGuild().getTextChannelById(851535846284984400L);
+                TextChannel textChannel = event.getGuild().getTextChannelById(plugin.TEMP_CHANNEL);
                 //Colour for Embed
                 Random rand = new Random();
                 int i = rand.nextInt(colours.length);
@@ -55,7 +55,7 @@ public class MoveIntoMainChannelListener extends ListenerAdapter {
                 plugin.tempchannels.put(event.getMember(), tempChannel.getIdLong());
             } else {
 
-                TextChannel textChannel = event.getGuild().getTextChannelById(851535846284984400L);
+                TextChannel textChannel = event.getGuild().getTextChannelById(plugin.TEMP_CHANNEL);
                 //Colour for Embed
                 Random rand = new Random();
                 int i = rand.nextInt(colours.length);
